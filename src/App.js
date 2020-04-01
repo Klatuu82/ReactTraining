@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person'
+import Person from './Person/Person';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 
 class App extends Component{
@@ -11,6 +13,7 @@ class App extends Component{
             {id: 'hcth', name:'Sarah' ,age: 25}
         ],
         showPersons: false,
+        word: '',
     };
 
     nameChangedHandler = (event, id) => {
@@ -38,9 +41,25 @@ class App extends Component{
         this.setState({persons: persons});
     };
 
+    inputChangedHandler = (event) => {
+        this.setState({
+            word : event.target.value,
+        })
+    };
+
     togglePersonHandler = () => {
         const doesShow = this.state.showPersons;
         this.setState({showPersons: !doesShow})
+    };
+
+    deleteCharHandler = (index) => {
+        const oldWord = this.state.word;
+
+        let newWord = oldWord.slice(0, index) + oldWord.slice(index+1, oldWord.length);
+        this.setState({
+            word: newWord,
+        });
+        console.log(index);
     };
 
     render() {
@@ -61,11 +80,47 @@ class App extends Component{
                 </div>
             );
         }
+        let length = null;
+        if(this.state.word){
+            length = (
+                <div>
+                    <p>{this.state.word.length}</p>
+                </div>
+            );
+        }
+        let chars = [];
+        let charsDiv = null;
+        if(this.state.word){
+            let char;
+            let i = -1;
+            for(char of this.state.word){
+                let index = ++i;
+                chars[index] = (
+                    <Char
+                        inputChar={char}
+                        click={() => this.deleteCharHandler(index)}
+                    />
+                );
+            }
+            charsDiv = (
+                <div>
+                    {chars}
+                </div>
+            );
+        }
+
         return (
             <div className="App">
                 <h1>Hi, I'm a React App</h1>
                 <button onClick={this.togglePersonHandler} >Toggle Persons</button>
-
+                <input
+                    type="text"
+                    onChange={(event) => this.inputChangedHandler(event)}
+                    value={this.state.word}
+                />
+                {length}
+                <Validation length={this.state.word.length}/>
+                {charsDiv}
                 {persons}
 
             </div>
