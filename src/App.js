@@ -1,20 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.module.css';
 import Person from './Person/Person';
-import styled from 'styled-components';
-
-const StyledButton = styled.button`
-    background-color: ${props => props.alt ? 'red' : 'green'};
-    color: white;
-    font: inherit;
-    border: 1x solid blue;
-    padding: 8px;
-    cursor: pointer;
-    &:hover {
-        background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
-        color: black;
-    }
-`;
 
 class App extends Component{
     state = {
@@ -36,6 +22,7 @@ class App extends Component{
         };
 
         person.name = event.target.value;
+
         const persons  = [...this.state.persons];
         persons[personIndex] = person;
 
@@ -57,21 +44,8 @@ class App extends Component{
     };
 
     render() {
-    
-        const style = {
-            backgroundColor: 'green',
-            color: 'white',
-            font: 'inherit',
-            border: '1x solid blue',
-            padding: '8px',
-            cursor: 'pointer',
-            ':hover': {
-                backgroundColor: 'lightgreen',
-                color: 'black',
-            }
-        };
-
         let persons = null;
+        let btnClass = '';
 
         if(this.state.showPersons){
             persons = (
@@ -88,28 +62,24 @@ class App extends Component{
                 </div>
             );
 
-            // style.backgroundColor = 'red';
-            // style['hover'] = {
-            //     backgroundColor: 'salmon',
-            //     color: 'black'
-            // }
+            btnClass = classes.Red;
         }
 
-        const classes = [];
+        const assignedClasses = [];
         if (this.state.persons.length <= 2) {
-            classes.push('red'); // classes = ['red']
+            assignedClasses.push(classes.red); // classes = ['red']
         }
         if (this.state.persons.length <= 1) {
-            classes.push('bold'); // classes = ['red', 'bold']
+            assignedClasses.push(classes.bold); // classes = ['red', 'bold']
         }
 
         return (
-            <div className="App">
+            <div className={classes.App}>
                 <h1>Hi, I'm a React App</h1>
-                <p className={classes.join(' ')}>This is really working!</p>
-                <StyledButton alt={this.state.showPersons} onClick={this.togglePersonHandler} >
+                <p className={assignedClasses.join(' ')}>This is really working!</p>
+                <button className={btnClass} onClick={this.togglePersonHandler} >
                     Toggle Persons
-                </StyledButton>
+                </button>
                 {persons}
             </div>
         );
